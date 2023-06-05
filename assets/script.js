@@ -23,11 +23,11 @@ const operate = (x, op, y) => {
   if (op === "+") {
     displayText = add(x, y);
   } else if (op === "-") {
-    subtract(x, y);
+    displayText = subtract(x, y);
   } else if (op === "*") {
-    multiply(x, y);
+    displayText = multiply(x, y);
   } else if (op === "/") {
-    divide(x, y);
+    displayText = divide(x, y);
   }
 }
 
@@ -54,7 +54,7 @@ const populateDisplay = () => {
   for (let j = 0; j < OP_BTNS.length; j++) {
     let opBtn = OP_BTNS[j];
     opBtn.addEventListener("click", function () {
-      if (operator.length === 1) {
+      if (operator.length === 1 && numTwo.length === 0) {
         operator.splice(0, 1);
         operator.push(opBtn.textContent);
       } else {
@@ -71,22 +71,25 @@ const populateDisplay = () => {
   }
 
   EQUALS_BTN.addEventListener("click", function () {
+    if (numTwo.length === 0 && operator.length === 0) {
+      DISPLAY.textContent = numOne;
+    }
     operate(numOne.join(""), operator.toString(), numTwo.join(""));
-    clearCalcStores();
     DISPLAY.textContent = displayText;
+    numOne = [];
+    numOne.push(displayText.toString());
+    numTwo = [];
+    operator = [];
+
   });
 
   CLEAR_BTN.addEventListener("click", function () {
-    clearCalcStores();
+    numOne = [];
+    numTwo = [];
+    operator = [];
     displayText = [];
     DISPLAY.textContent = "";
   });
-}
-
-const clearCalcStores = () => {
-  numOne = [];
-  operator = [];
-  numTwo = [];
 }
 
 populateDisplay();
