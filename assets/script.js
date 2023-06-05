@@ -1,3 +1,4 @@
+const DISPLAY = document.querySelector(".display");
 let numOne = [];
 let operator = [];
 let numTwo = [];
@@ -16,6 +17,9 @@ const multiply = (x, y) => {
 }
 
 const divide = (x, y) => {
+  if (y === "0") {
+    return "Very cheeky indeed..."
+  }
   return x / y;
 }
 
@@ -32,7 +36,6 @@ const operate = (x, op, y) => {
 }
 
 const populateDisplay = () => {
-  const DISPLAY = document.querySelector(".display");
   const NUM_BTNS = document.querySelectorAll(".num-btn");
   const OP_BTNS = document.querySelectorAll(".op-btn");
   const EQUALS_BTN = document.querySelector(".equals-btn");
@@ -72,15 +75,15 @@ const populateDisplay = () => {
 
   EQUALS_BTN.addEventListener("click", function () {
     if (numTwo.length === 0 && operator.length === 0) {
-      DISPLAY.textContent = numOne;
+      DISPLAY.textContent = numOne.join("");
+    } else {
+      operate(numOne.join(""), operator.toString(), numTwo.join(""));
+      DISPLAY.textContent = displayText;
+      numOne = [];
+      numOne.push(displayText.toString());
+      numTwo = [];
+      operator = [];
     }
-    operate(numOne.join(""), operator.toString(), numTwo.join(""));
-    DISPLAY.textContent = displayText;
-    numOne = [];
-    numOne.push(displayText.toString());
-    numTwo = [];
-    operator = [];
-
   });
 
   CLEAR_BTN.addEventListener("click", function () {
