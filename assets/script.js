@@ -44,9 +44,22 @@ const populateDisplay = () => {
   for (let i = 0; i < NUM_BTNS.length; i++) {
     let numBtn = NUM_BTNS[i];
     numBtn.addEventListener("click", function () {
+      if (numOne.includes(".") && numBtn.textContent === "." && numTwo.length === 0) {
+        alert("Only enter one decimal point");
+        window.location.reload();
+      } else if (numTwo.includes(".") && numBtn.textContent === ".") {
+        alert("Only enter one decimal point");
+        window.location.reload();
+      }
+
+      if (numOne.length > 13 || numTwo > 13) {
+        clearData();
+        alert("Enter a smaller number please!");
+      }
+
       if (operator.length > 0) {
         numTwo.push(numBtn.textContent);
-        DISPLAY.textContent = numOne.join("") + " " + operator.toString() + " " + numTwo.join("");
+        DISPLAY.textContent = numTwo.join("");
       } else {
         numOne.push(numBtn.textContent);
         DISPLAY.textContent = numOne.join("");
@@ -56,6 +69,7 @@ const populateDisplay = () => {
 
   for (let j = 0; j < OP_BTNS.length; j++) {
     let opBtn = OP_BTNS[j];
+
     opBtn.addEventListener("click", function () {
       if (operator.length === 1 && numTwo.length === 0) {
         operator.splice(0, 1);
@@ -64,35 +78,38 @@ const populateDisplay = () => {
         operator.push(opBtn.textContent);
       }
 
-      // resets numTwo if user changes operator
       if (numTwo.length > 0) {
         numTwo = [];
       }
 
-      DISPLAY.textContent = numOne.join("") + " " + operator;
+      DISPLAY.textContent = numOne.join("");
     });
   }
 
-  EQUALS_BTN.addEventListener("click", function () {
-    if (numTwo.length === 0 && operator.length === 0) {
-      DISPLAY.textContent = numOne.join("");
-    } else {
-      operate(numOne.join(""), operator.toString(), numTwo.join(""));
-      DISPLAY.textContent = displayText;
-      numOne = [];
-      numOne.push(displayText.toString());
-      numTwo = [];
-      operator = [];
-    }
-  });
+  EQUALS_BTN.addEventListener("click", () => evaluateData());
 
-  CLEAR_BTN.addEventListener("click", function () {
+  CLEAR_BTN.addEventListener("click", () => clearData());
+}
+
+const evaluateData = () => {
+  if (numTwo.length === 0 && operator.length === 0) {
+    DISPLAY.textContent = numOne.join("");
+  } else {
+    operate(numOne.join(""), operator.toString(), numTwo.join(""));
+    DISPLAY.textContent = displayText;
     numOne = [];
+    numOne.push(displayText.toString());
     numTwo = [];
     operator = [];
-    displayText = [];
-    DISPLAY.textContent = "";
-  });
+  }
+}
+
+const clearData = () => {
+  numOne = [];
+  numTwo = [];
+  operator = [];
+  displayText = [];
+  DISPLAY.textContent = "";
 }
 
 populateDisplay();
